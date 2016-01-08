@@ -43,7 +43,7 @@ chrome.app.runtime.onLaunched.addListener(function(args) {
                     });
                     webview.addEventListener('contentload', function(e) {
                         var url = e.target.src;
-                        if (url == ABOUT_BLANK && !!args.url) {
+                        if (url == ABOUT_BLANK && !args.url) {
                             e.target.src = `data:text/html;base64,${btoa(BLANK_TEXT)}`;
                         }
                     });
