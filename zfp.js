@@ -8,7 +8,7 @@ var mainWindow;
 
 function OpenZFP(args, win) {
     var webview = win.contentWindow.document.querySelector('webview');
-    var url = args.url || ABOUT_BLANK;
+    var url = (args.url || ABOUT_BLANK).replace(/^https?(:\/\/)/gi, 'https$1');
     webview.src = url;
     return webview;
 }
