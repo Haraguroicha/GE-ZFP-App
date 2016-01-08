@@ -1,0 +1,63 @@
+{
+   "name": "GE ZFP App",
+   "version": "0.0.1",
+   "description": "Let GE ZFP always reuse previous tabs",
+   "update_url": "https://cdn.rawgit.com/Haraguroicha/GE-ZFP-App/master/version.xml",
+   "app": {
+      "background": {
+         "scripts": [ "zfp.js" ]
+      }
+   },
+   "icons": {
+      "512": "favicon_512.png",
+      "256": "favicon_256.png",
+      "64": "favicon_64.png",
+      "16": "favicon_16.png"
+   },
+   "manifest_version": 2,
+   "minimum_chrome_version": "47",
+   "sockets": {
+      "tcp": {
+         "connect": "*"
+      },
+      "udp": {
+         "send": "*"
+      }
+   },
+   "permissions": [
+      "<all_urls>",
+      "nativeMessaging",
+      "storage", {
+         "fileSystem": [ "write" ]
+      },
+      "unlimitedStorage",
+      "webview",
+      "notifications", {
+         "socket": [ "tcp-connect:*:*" ]
+      },
+      "app.window",
+      "contextMenus",
+      "clipboardRead",
+      "clipboardWrite",
+      "idle",
+      "fullscreen",
+      "pointerLock",
+      "power",
+      "system.display",
+      "system.storage",
+      "videoCapture",
+      "background",
+      "clipboardRead",
+      "clipboardWrite"
+   ],
+   "url_handlers": {
+      "launchZFP": {
+         "matches": [
+            "*://*/ZFP/*",
+            "*://*/ZFP?*"
+         ],
+         "title": "GE ZFP"
+      }
+   }
+}
+/*iceghkpmaeoiomhkfjpcjjmmclihiejg*/
