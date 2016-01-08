@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='iceghkpmaeoiomhkfjpcjjmmclihiejg'>
-    <updatecheck codebase='https://github.com/Haraguroicha/GE-ZFP-App/releases/download/untagged-d997382f13053e93b915/GE-ZFP-App-0.0.1.crx' version='0.0.1' />
+    <updatecheck codebase='https://github.com/Haraguroicha/GE-ZFP-App/releases/download/v0.0.1/GE-ZFP-App-0.0.1.crx' version='0.0.1' />
   </app>
 </gupdate>
