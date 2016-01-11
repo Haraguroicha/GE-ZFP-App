@@ -12,7 +12,7 @@ Second, there is no way to install on the click just like Chrome Web Store, unle
 
 ### Install manually
 
-1. Download from [this link](https://cdn.rawgit.com/Haraguroicha/GE-ZFP-App/master/GE-ZFP-App.crx)
+1. Download from [this link](https://github.com/Haraguroicha/GE-ZFP-App/raw/master/GE-ZFP-App.crx)
 2. Goto [Extensions Page](chrome://extensions)
 3. Drag and Drop downloaded file into Chrome Extensions Page
 4. Done
