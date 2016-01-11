@@ -1,7 +1,8 @@
 'use strict';
 const ABOUT_BLANK = 'about:blank';
 const ABOUT_CLOSE = chrome.runtime.getURL('close.html');
-const BLANK_TEXT = `<meta http-equiv="refresh" content="0; url='chrome-extension://jkagbkpmnjhenicjkpbieopgfeclkojo/blank.html'">`;
+const DEFAULT_BLANK = chrome.runtime.getURL('blank.html');
+const BLANK_TEXT = `<meta http-equiv="refresh" content="0; url='${DEFAULT_BLANK}'">`;
 
 var mainWindow;
 
