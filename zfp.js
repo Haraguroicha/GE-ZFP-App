@@ -1,14 +1,19 @@
 'use strict';
 const ABOUT_BLANK = 'about:blank';
-const BLANK_TEXT = `Sorry for your inconvenient to saw this page when you want to Open GE ZFP, 
-this app is only used for triggered by match ZFP URL in your browser, 
-please click a ZFP link or paste ZFP link in your address bar to navigate ZFP.`;
+const ABOUT_CLOSE = chrome.runtime.getURL('close.html');
+const BLANK_TEXT = `<meta http-equiv="refresh" content="0; url='chrome-extension://jkagbkpmnjhenicjkpbieopgfeclkojo/blank.html'">`;
 
 var mainWindow;
 
 function OpenZFP(args, win) {
     var webview = win.contentWindow.document.querySelector('webview');
-    var url = (args.url || ABOUT_BLANK).replace(/^https?(:\/\/)/gi, 'https$1');
+    var url = (args.url || ABOUT_BLANK)
+        .replace(/lights=[\w]+/gi, '')
+        .replace(/titleBar=[\w]+/gi, '')
+        .replace(/mode=[\w]+/gi, '')
+        .replace(/^https?(:\/\/)([^\/]+)\/zfp\/?\??/gi, 'https$1$2/ZFP?lights=Off&titleBar=Off&mode=Inbound&')
+        .replace(/&+/gi, '&')
+        .replace(/&#+/gi, '#');
     webview.src = url;
     return webview;
 }
@@ -43,9 +48,17 @@ chrome.app.runtime.onLaunched.addListener(function(args) {
                     });
                     webview.addEventListener('contentload', function(e) {
                         var url = e.target.src;
-                        if (url == ABOUT_BLANK && !args.url) {
-                            e.target.src = `data:text/html;base64,${btoa(BLANK_TEXT)}`;
+                        if (url == ABOUT_CLOSE) {
+                            return Array.from(chrome.app.window.getAll()).forEach(function(win) {
+                                win.close();
+                            });
                         }
+                        if (url == ABOUT_BLANK && !args.url) {
+                            return e.target.src = `data:text/html;base64,${btoa(BLANK_TEXT)}`;
+                        }
+                    });
+                    webview.addEventListener('consolemessage', function(e) {
+                        console.log('Guest page logged a message: ', e.message);
                     });
                 });
             }
