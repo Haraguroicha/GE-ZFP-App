@@ -21,8 +21,8 @@ Second, there is no way to install on the click just like Chrome Web Store, unle
 
 1. Open Group Policy Editor `gpmc.msc`
 2. Navigate to Chrome Policy
-3. Add `iceghkpmaeoiomhkfjpcjjmmclihiejg;https://raw.githubusercontent.com/Haraguroicha/GE-ZFP-App/master/version.xml` into `ExtensionInstallForcelist`
-4. (Optional) Add `https://raw.githubusercontent.com/Haraguroicha/*` into `ExtensionInstallSources`
+3. Add `iceghkpmaeoiomhkfjpcjjmmclihiejg;https://github.com/Haraguroicha/GE-ZFP-App/raw/master/version.xml` into `ExtensionInstallForcelist`
+4. (Optional) Add `https://github.com/Haraguroicha/*` into `ExtensionInstallSources`
 5. Execute `gpupdate` or restart client PC to effect this changes.
 6. Chrome will have a non-removable app in the Extensions page with display `Installed by enterprise policy.` and also `(This extension is managed and cannot be removed or disabled.)`
 
