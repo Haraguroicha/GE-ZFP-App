@@ -2,7 +2,7 @@
    "name": "GE ZFP App",
    "version": "0.0.1",
    "description": "Let GE ZFP always reuse previous tabs",
-   "update_url": "https://github.com/Haraguroicha/GE-ZFP-App/raw/master/version.xml",
+   /*"update_url": "https://github.com/Haraguroicha/GE-ZFP-App/raw/master/version.xml",*/
    "app": {
       "background": {
          "scripts": [ "zfp.js" ]
