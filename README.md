@@ -26,6 +26,25 @@ Second, there is no way to install on the click just like Chrome Web Store, unle
 5. Execute `gpupdate` or restart client PC to effect this changes.
 6. Chrome will have a non-removable app in the Extensions page with display `Installed by enterprise policy.` and also `(This extension is managed and cannot be removed or disabled.)`
 
+### Reverse Proxy from private nginx server
+
+Only use when your enterprise is managed without internet connection, and you can set `version.xml` URL to `iceghkpmaeoiomhkfjpcjjmmclihiejg;https://private-server-node/version.xml` and here is the example of nginx configuration:
+
+```nginx
+    location /_crx/GE-ZFP-App/ {
+        proxy_set_header Host raw.githubusercontent.com;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Accept-Encoding "";
+        proxy_next_upstream error timeout http_500 http_502 http_503 http_504 http_403 http_404;
+        proxy_pass https://raw.githubusercontent.com/Haraguroicha/GE-ZFP-App/master/;
+        sub_filter 'https://github.com/Haraguroicha/GE-ZFP-App/raw/master/' 'https://private-server-node/_crx/GE-ZFP-App/';
+        sub_filter_last_modified on;
+        sub_filter_once on;
+        sub_filter_types text/plain;
+    }
+```
+
 ## SPECIAL AND LICENSED TRADEMARKS AND/OR COPYRIGHTS
 
 - For `GE Logo` is a trademark of `General Electric Company`
