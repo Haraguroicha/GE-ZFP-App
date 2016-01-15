@@ -2,20 +2,22 @@
    "name": "GE ZFP App",
    "version": "0.0.4",
    "description": "Let GE ZFP always reuse previous tabs",
+   "author": "Haraguroicha",
+   "manifest_version": 2,
+   "minimum_chrome_version": "47",
    "update_url": "https://github.com/Haraguroicha/GE-ZFP-App/raw/master/version.xml",
-   "app": {
-      "background": {
-         "scripts": [ "zfp.js" ]
-      }
-   },
    "icons": {
       "512": "favicon_512.png",
       "256": "favicon_256.png",
       "64": "favicon_64.png",
       "16": "favicon_16.png"
    },
-   "manifest_version": 2,
-   "minimum_chrome_version": "47",
+   "app": {
+      "background": {
+         "scripts": [ "zfp.js" ]
+      }
+   },
+   "import": [],
    "sockets": {
       "tcp": {
          "connect": "*"
