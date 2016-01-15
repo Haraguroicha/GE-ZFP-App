@@ -1,6 +1,6 @@
 {
    "name": "GE ZFP App",
-   "version": "0.0.3",
+   "version": "0.0.4",
    "description": "Let GE ZFP always reuse previous tabs",
    "update_url": "https://github.com/Haraguroicha/GE-ZFP-App/raw/master/version.xml",
    "app": {
@@ -61,21 +61,21 @@
    "url_handlers": {
       "launchZFP": {
          "matches": [
-            "*://*/ZFP/*",
+            "*://*/ZFP/?*",
             "*://*/ZFP?*",
-            "*://*/zfp/*",
+            "*://*/zfp/?*",
             "*://*/zfp?*",
-            "*://*/Zfp/*",
+            "*://*/Zfp/?*",
             "*://*/Zfp?*",
-            "*://*/zFP/*",
+            "*://*/zFP/?*",
             "*://*/zFP?*",
-            "*://*/ZFp/*",
+            "*://*/ZFp/?*",
             "*://*/ZFp?*",
-            "*://*/zfP/*",
+            "*://*/zfP/?*",
             "*://*/zfP?*",
-            "*://*/ZfP/*",
+            "*://*/ZfP/?*",
             "*://*/ZfP?*",
-            "*://*/zFp/*",
+            "*://*/zFp/?*",
             "*://*/zFp?*"
          ],
          "title": "GE ZFP"

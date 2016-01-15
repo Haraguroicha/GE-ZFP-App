@@ -43,9 +43,9 @@ chrome.app.runtime.onLaunched.addListener(function(args) {
                     win.resizeTo((screen.availWidth >= 1024 ? screen.availWidth : 1024), (screen.availHeight >= 768 ? screen.availHeight : 750));
                     var webview = OpenZFP(args, win);
                     webview.addEventListener('newwindow', function(e) {
-                        // console.log(e)
-                        // e.preventDefault();
-                        // newWindow_openInTabAndInterceptRedirect(e);
+                        console.log(e)
+                        e.preventDefault();
+                        newWindow_openInTabAndInterceptRedirect(e, (screen.availWidth >= 1024 ? screen.availWidth : 1024) - 100, (screen.availHeight >= 768 ? screen.availHeight : 750) - 100);
                     });
                     webview.addEventListener('contentload', function(e) {
                         var url = e.target.src;
@@ -72,121 +72,45 @@ function popupwindow(url, title, w, h) {
     var top = (screen.availHeight / 2) - (h / 2);
     return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left + ', screenX=' + left + ', screenY=' + top);
 }
-function newWindow_openInTabAndInterceptRedirect(event) {
+function newWindow_openInTabAndInterceptRedirect(event, w, h) {
     var newWindow = event.window;
-    var child = popupwindow('childWindow.html', 'child', 800, 600);
+    var child = popupwindow('childWindow.html', 'child', w, h);
     var formHTML = event.targetUrl;
-    if(formHTML.match(/^EMR\/\//i) == null) {
-        setTimeout(function() {
-            var args = unescape(formHTML).split('\x07').slice(1).reverse().slice(-2).reverse();
-            var title = decodeURIComponent(atob(args[0] || ''));
-            var message = decodeURIComponent(atob(args[1] || ''));
-            child.document.title = 'Sending Native Message' + (title.length > 0 ? ' - ' + title : '');
-            child.document.getElementById('message').innerHTML = message || 'Please waiting for response...';
-        }, 500);
-        setTimeout(function() { child.location.href = formHTML; }, 1000);
-    } else {
-        formHTML = unescape(formHTML).match(/EMR\/\/(.*)$/)[0].split('\x07')[2];
-        console.log(formHTML);
-        setTimeout(function() {
-            child.document.title = 'Submitting Form...';
-            child.document.getElementById('content').innerHTML = formHTML;
-            child.document.getElementsByTagName('form')[0].submit();
-            //child.close();
-        }, 1000);
-    }
-        //chrome.app.window.create('packaged/childWindow.html', {id: id}, openCallback);
-        // Create an invisible proxy webview to listen to redirect
-        // requests from |newWindow| (the window that the guest is
-        // trying to open). NOTE: The proxy webview currently has to
-        // live somewhere in the DOM, so we append it to the body.
-        // This requirement is in the process of being eliminated.
-        var proxyWebview = document.createElement('webview');
-        //p = proxyWebview;
-        console.log(proxyWebview);
-        /*
-        proxyWebview.onBeforeRequest.addListener(
-            // Listen to onBeforeRequest event (chrome.webRequest API)
-            // on proxyWebview in order to intercept newWindow's redirects.
-            function(e) {
-              console.log(e);
-            },
-            { urls: [ "<all_urls>" ] },
-            [ 'blocking' ]
-        );
-        */
-        mainWindow.contentWindow.document.body.appendChild(proxyWebview);
+    // Create an invisible proxy webview to listen to redirect
+    // requests from |newWindow| (the window that the guest is
+    // trying to open). NOTE: The proxy webview currently has to
+    // live somewhere in the DOM, so we append it to the body.
+    // This requirement is in the process of being eliminated.
+    var proxyWebview = document.createElement('webview');
+    setTimeout(function() {
+        child.document.title = 'Waiting...';
+        child.document.body.appendChild(proxyWebview);
+        child.document.body.className = '';
+        child.document.getElementById('background').style.display = 'none';
+    }, 1000);
+    proxyWebview.addEventListener('loadstop', function(e) {
+        e.target.executeScript({
+            code: 'document.title'
+        }, function(title) {
+            child.document.title = document.title || decodeURIComponent(formHTML.split('/').splice(-1));
+        });
+    });
+    /*
+    proxyWebview.onBeforeRequest.addListener(
+        // Listen to onBeforeRequest event (chrome.webRequest API)
+        // on proxyWebview in order to intercept newWindow's redirects.
+        function(e) {
+            console.log(e);
+        },
+        { urls: [ "<all_urls>" ] },
+        [ 'blocking' ]
+    );
+    */
+    mainWindow.contentWindow.document.body.appendChild(proxyWebview);
 
-        // Attach |newWindow| to proxyWebview. From the original
-        // webview guest's point of view, the window is now opened
-        // and ready to be redirected: when it does so, the redirect
-        // will be intercepted by |onBeforeRequestListener|.
-        newWindow.attach(proxyWebview);
+    // Attach |newWindow| to proxyWebview. From the original
+    // webview guest's point of view, the window is now opened
+    // and ready to be redirected: when it does so, the redirect
+    // will be intercepted by |onBeforeRequestListener|.
+    newWindow.attach(proxyWebview);
 }
-
-/*
-chrome.tabs.onUpdated.addListener(function(_id, cgi, _t) {
-    var rej = function(v) {console.log(`rejected: ${v}`)};
-    var zfpPattern = /^https?:\/\/.*\/ZFP[/?]{1}/i;
-    var id = _t.id;
-    var url = _t.url;
-    var status = _t.status;
-    if (url.match(zfpPattern) != null) {
-        var zp = new Promise(function (resolve, reject) {
-            var z = [];
-            var rs = function() {
-                resolve(z);
-            };
-            var t = setTimeout(rs, 100);
-            chrome.windows.getAll(function(windows) {
-                Array.from(windows).forEach(function(window) {
-                    chrome.tabs.getAllInWindow(window.id, function(tabs) {
-                        Array.from(tabs).forEach(function(tab) {
-                            var isZFP = tab.url.match(zfpPattern) != null;
-                            if (isZFP) {
-                                z.push(tab);
-                                clearTimeout(t);
-                                t = setTimeout(rs, 100);
-                            }
-                        });
-                    });
-                });
-            });
-        }).then(function(zt) {
-            zt = zt.map(function(e) {
-                if (e.id != id) {
-                    return e;
-                } else {
-                    console.log(e);
-                    return null;
-                }
-            });
-            if(zt.length > 0) {
-                var t = zt[0];
-                if(t != null) {
-                    chrome.tabs.executeScript(t.id, {
-                        code: `
-                            var qs = '${url}'
-                                .replace(/(&?lights=O(ff|n)&?|&?titleBar=O(ff|n)&?|&?mode=Inbound&?)/gi, '&')
-                                .replace(/[&]+/gi, '&')
-                                .replace(/\\?(&?)/gi, '?lights=Off&titleBar=Off&mode=Inbound$1')
-                                .replace(/\\/#/gi, '/?lights=Off&titleBar=Off&mode=Inbound#')
-                                .replace(/&#/gi, '#');
-                            var ll = { search: location.search, hash: location.hash };
-                            if (location.href != qs) {
-                                location.replace(qs);
-                            }
-                        `
-                    }, function() {
-                        try {
-                            chrome.tabs.remove(id);
-                        } catch(e) {
-                            //
-                        }
-                    });
-                }
-            }
-        }, rej).catch(rej);
-    }
-});
-*/
